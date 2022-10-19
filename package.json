@@ -11,8 +11,10 @@
     "index.js"
   ],
   "devDependencies": {
-    "@keeplifestories/prettier-config": "1.0.0",
-    "eslint": "8.16.0"
+    "@keeplifestories/prettier-config": "1.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">= 8"
   },
   "prettier": "@keeplifestories/prettier-config"
 }

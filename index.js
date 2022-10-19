@@ -1,35 +1,16 @@
 'use strict';
 
+const ifPlugin = (module, thenRules) => {
+  try {
+    require.resolve(module);
+    return thenRules;
+  } catch (e) {
+    return {};
+  }
+};
+
 module.exports = {
   rules: {
-    'import/first': ['warn'],
-    'import/newline-after-import': ['warn'],
-    'import/no-useless-path-segments': ['warn'],
-    'import/order': [
-      'warn',
-      {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          ['parent', 'sibling', 'index', 'object', 'type'],
-        ],
-        pathGroups: [
-          {
-            pattern: 'react+(|-native)',
-            group: 'builtin',
-            position: 'before',
-          },
-        ],
-        pathGroupsExcludedImportTypes: ['react', 'react-native'],
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true,
-        },
-        'newlines-between': 'always',
-      },
-    ],
-    'import/no-relative-parent-imports': 'warn',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-unused-vars': 'off',
     'no-restricted-imports': [
@@ -72,12 +53,57 @@ module.exports = {
       },
     ],
     'no-shadow': 'off',
-    'prettier/prettier': ['warn'],
-    'react-native/no-unused-styles': ['warn'],
-    '@typescript-eslint/no-shadow': ['error'],
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-    ],
+    ...ifPlugin('eslint-plugin-import', {
+      'import/first': ['warn'],
+      'import/newline-after-import': ['warn'],
+      'import/no-useless-path-segments': ['warn'],
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index', 'object', 'type'],
+          ],
+          pathGroups: [
+            {
+              pattern: 'react+(|-native)',
+              group: 'builtin',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['react', 'react-native'],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+          'newlines-between': 'always',
+        },
+      ],
+      'import/no-relative-parent-imports': 'warn',
+    }),
+    ...ifPlugin('eslint-plugin-prettier', {
+      'prettier/prettier': ['warn'],
+    }),
+    ...ifPlugin('eslint-plugin-react-native', {
+      'react-native/no-unused-styles': ['warn'],
+    }),
+    ...ifPlugin('@typescript-eslint/eslint-plugin', {
+      '@typescript-eslint/no-shadow': ['error'],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    }),
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        // Typescript will handle this in type checking
+        'no-undef': 'off',
+      },
+    },
+  ],
 };
