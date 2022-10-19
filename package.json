@@ -1,6 +1,6 @@
 {
   "name": "@keeplifestories/eslint-config",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "ESLint sharable config for Honeycomb style",
   "license": "MIT",
   "author": "Philihp Busby <philihp@joinhoneycomb.com>",
